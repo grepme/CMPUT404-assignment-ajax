@@ -30,6 +30,7 @@
 <script>
     var canvas = document.getElementById('c');
     var host = window.location.host;
+    var status = false;
     var context = canvas.getContext("2d");
     var W = canvas.width = window.innerWidth - 6;
     var H = canvas.height = window.innerHeight - 50;
@@ -54,7 +55,8 @@
             }
         };
         //XXX: POST to a URL
-        xhr.open("POST", url, true);
+        //Making this Async will send everyone into a frenzy....
+        xhr.open("POST", url, false);
 
         //Stringify the request
         var data = JSON.stringify(objects);
@@ -75,8 +77,15 @@
                         //XXX: parse some JSON from the request!
                         //xhr.response returns a JSON object
 
+                        //Update the status, online status of the server.
+                        status = true;
+
                         //XXX: Pass the data to the callback!
                         callback(xhr.response);
+                    }
+                    else{
+                        //Update the status, online status of the server.
+                        status = false;
                     }
                 }
                 catch (e) {
@@ -137,6 +146,11 @@
             var entity = world[key];
             drawCircle(context, prepEntity(entity));
         }
+
+        //We need to draw the status of the server on the canvas
+        context.fillStyle = "blue";
+        context.font = "bold 24px Arial";
+        context.fillText("Server Status: " + status, 0, H);
     }
 
     var drawNext = true;
@@ -179,8 +193,7 @@
         world[entity] = data;
         drawNextFrame(); // (but should we?)
         //XXX: Send a XHTML Request that updates the entity you just  modified!
-        sendJSONXMLHTTPRequest("/entity/" + entity, data, function(){ console.log("Updated Entity!")});
-
+        sendJSONXMLHTTPRequest("/entity/" + entity, data, function(data){});
     }
 
     var counter = 0;
@@ -306,7 +319,7 @@
 
     function update() {
         //XXX: TODO Get the world from the webservice using a XMLHTTPRequest
-         getJSONXMLHTTPRequest("/world", function(data){ console.log("Got me a world!"); world = JSON.parse(data);});
+         getJSONXMLHTTPRequest("/world", function(data){ world = JSON.parse(data);});
         drawFrame();
     }
 

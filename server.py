@@ -88,7 +88,8 @@ def update(entity):
     params = flask_post_json()
     for key, value in params.items():
         myWorld.update(entity, key, value)
-    return flask.jsonify({'status': True})
+    # Return the same params that were posted to us as JSON?
+    return flask.jsonify(params)
 
 
 @app.route("/world", methods=['POST', 'GET'])
