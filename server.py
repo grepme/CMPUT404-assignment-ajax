@@ -86,7 +86,8 @@ def hello():
 def update(entity):
     """update the entities via this interface"""
     params = flask_post_json()
-    myWorld.update(entity, params['key'], params['value'])
+    for key, value in params.items():
+        myWorld.update(entity, key, value)
     return flask.jsonify({'status': True})
 
 

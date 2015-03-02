@@ -42,7 +42,10 @@
                 try {
                     if (xhr.status == 200) {
                         //XXX: parse some JSON from the request!
+                        //xhr.response returns a JSON object
+
                         //XXX: Pass the data to the callback!
+                        callback(xhr.response);
                     }
                 }
                 catch (e) {
@@ -60,9 +63,34 @@
         // Remember to use application/json !
         xhr.setRequestHeader("Accept", "application/json");
         xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-        xhr.setRequestHeader("Content-Length", data.length);
         xhr.send(data);
+    }
 
+    function getJSONXMLHTTPRequest(url, callback) {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4) {
+                try {
+                    if (xhr.status == 200) {
+                        //XXX: parse some JSON from the request!
+                        //xhr.response returns a JSON object
+
+                        //XXX: Pass the data to the callback!
+                        callback(xhr.response);
+                    }
+                }
+                catch (e) {
+                    alert('Error: ' + e.name);
+                }
+            }
+        };
+
+        // We want JSON from the request
+        xhr.open("GET", url, true);
+        xhr.setRequestHeader("Accept", "application/json");
+
+        // Send off the get request!
+        xhr.send()
     }
 
 
@@ -151,6 +179,7 @@
         world[entity] = data;
         drawNextFrame(); // (but should we?)
         //XXX: Send a XHTML Request that updates the entity you just  modified!
+        sendJSONXMLHTTPRequest("/entity/" + entity, data, function(){ console.log("Updated Entity!")});
 
     }
 
@@ -277,6 +306,7 @@
 
     function update() {
         //XXX: TODO Get the world from the webservice using a XMLHTTPRequest
+         getJSONXMLHTTPRequest("/world", function(data){ console.log("Got me a world!"); world = JSON.parse(data);});
         drawFrame();
     }
 
