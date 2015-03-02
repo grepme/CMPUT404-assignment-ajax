@@ -38,6 +38,7 @@ app.debug = True
 class World:
     def __init__(self):
         self.clear()
+        self.space = {}
 
     def update(self, entity, key, value):
         entry = self.space.get(entity, dict())
@@ -65,11 +66,11 @@ myWorld = World()
 # I give this to you, this is how you get the raw body/data portion of a post in flask
 # this should come with flask but whatever, it's not my project.
 def flask_post_json():
-    '''Ah the joys of frameworks! They do so much work for you
-       that they get in the way of sane operation!'''
-    if (request.json != None):
+    """Ah the joys of frameworks! They do so much work for you
+       that they get in the way of sane operation!"""
+    if request.json is not None:
         return request.json
-    elif (request.data != None and request.data != ''):
+    elif request.data is not None and request.data != '':
         return json.loads(request.data)
     else:
         return json.loads(request.form.keys()[0])
