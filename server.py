@@ -18,7 +18,7 @@
 # python server.py
 #
 # remember to:
-#     pip install flask
+# pip install flask
 
 
 import flask
@@ -30,9 +30,10 @@ app.debug = True
 
 # An example world
 # {
-#    'a':{'x':1, 'y':2},
+# 'a':{'x':1, 'y':2},
 #    'b':{'x':2, 'y':3}
 # }
+
 
 class World:
     def __init__(self):
@@ -60,6 +61,7 @@ class World:
 
 myWorld = World()
 
+
 # I give this to you, this is how you get the raw body/data portion of a post in flask
 # this should come with flask but whatever, it's not my project.
 def flask_post_json():
@@ -75,32 +77,33 @@ def flask_post_json():
 
 @app.route("/")
 def hello():
-    '''Return something coherent here.. perhaps redirect to /static/index.html '''
+    """Return something coherent here.. perhaps redirect to /static/index.html """
     return None
 
 
 @app.route("/entity/<entity>", methods=['POST', 'PUT'])
 def update(entity):
-    '''update the entities via this interface'''
+    """update the entities via this interface"""
     return None
 
 
 @app.route("/world", methods=['POST', 'GET'])
 def world():
-    '''you should probably return the world here'''
+    """you should probably return the world here"""
     return None
 
 
 @app.route("/entity/<entity>")
 def get_entity(entity):
-    '''This is the GET version of the entity interface, return a representation of the entity'''
+    """This is the GET version of the entity interface, return a representation of the entity"""
     return None
 
 
 @app.route("/clear", methods=['POST', 'GET'])
 def clear():
-    '''Clear the world out!'''
-    return None
+    """Clear the world out!"""
+    myWorld.clear()
+    return flask.jsonify({'status': True})
 
 
 if __name__ == "__main__":
