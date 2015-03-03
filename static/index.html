@@ -34,6 +34,8 @@
     var context = canvas.getContext("2d");
     var W = canvas.width = window.innerWidth - 6;
     var H = canvas.height = window.innerHeight - 50;
+    var img = new Image();
+    img.src = '/static/doge.png';
 
 
     function sendJSONXMLHTTPRequest(url, objects, callback) {
@@ -83,7 +85,7 @@
                         //XXX: Pass the data to the callback!
                         callback(xhr.response);
                     }
-                    else{
+                    else {
                         //Update the status, online status of the server.
                         status = false;
                     }
@@ -108,15 +110,19 @@
     //XXX: TODO Make this prettier!
     function drawCircle(context, entity) {
         with (context) {
-            beginPath();
-            lineWidth = 3;
+            //Drawing doge rather than circle
             var x = entity["x"];
             var y = entity["y"];
-            //moveTo(x,y);
-            fillStyle = entity["colour"];
-            strokeStyle = fillStyle;
-            arc(x, y, (entity["radius"]) ? entity["radius"] : 50, 0, 2.0 * Math.PI, false);
-            stroke();
+            drawImage(img, x - 32, y - 34);
+            /*
+             beginPath();
+             lineWidth = 3;
+             //moveTo(x,y);
+             fillStyle = entity["colour"];
+             strokeStyle = fillStyle;
+             arc(x, y, (entity["radius"]) ? entity["radius"] : 50, 0, 2.0 * Math.PI, false);
+             stroke();
+             */
         }
     }
 
@@ -193,7 +199,8 @@
         world[entity] = data;
         drawNextFrame(); // (but should we?)
         //XXX: Send a XHTML Request that updates the entity you just  modified!
-        sendJSONXMLHTTPRequest("/entity/" + entity, data, function(data){});
+        sendJSONXMLHTTPRequest("/entity/" + entity, data, function (data) {
+        });
     }
 
     var counter = 0;
@@ -319,7 +326,9 @@
 
     function update() {
         //XXX: TODO Get the world from the webservice using a XMLHTTPRequest
-         getJSONXMLHTTPRequest("/world", function(data){ world = JSON.parse(data);});
+        getJSONXMLHTTPRequest("/world", function (data) {
+            world = JSON.parse(data);
+        });
         drawFrame();
     }
 
